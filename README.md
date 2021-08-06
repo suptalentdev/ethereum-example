@@ -23,8 +23,8 @@ github [CRA](https://github.com/facebook/create-react-app) repo
 
 #### Configuring RaribleSDK
 
-For this example we use simple non styled .tsx template and local state management. full example of `App.tsx` you can
-find in `src/` folder in root of repository.
+For this example we use simple non styled .tsx template and local state management. full example of app you can find
+in `src/` folder in root of repository in App.tsx and Dashboard.tsx components.
 
 Let's create a new function in the App.tsx file named `handleInit`. Which serves to check the presence of the Metamask
 provider in the browser and create an instance of the SDK.
@@ -81,13 +81,13 @@ useEffect(() => {
 #### Create Lazy mint NFT item
 
 Now we need some nft object to interact with it. the code below shows how you can create lazy-mint ERC721 token nft
-using SDK. Create a new async function inside our App.tsx component called `lazyMint`
+using SDK. Create a new async function inside our Dashboard.tsx component called `lazyMint`
 
 ```typescript
 const lazyMint = async () => {
     const item = await sdk?.nft.mintLazy({
         '@type': 'ERC721', // type of NFT to mint
-        contract: toAddress('0x6ede7f3c26975aad32a475e1021d8f6f39c89d82'), // rinkeby default Rarible collection
+        contract: toAddress('0x509fd4cdaa29be7b1fad251d8ea0fca2ca91eb60'), // rinkeby default Rarible collection
         uri: "/ipfs/QmWLsBu6nS4ovaHbGAXprD1qEssJu4r5taQfB74sCG51tp", // tokenUri, url to media that nft stores
         creators: [{ account: toAddress(accounts[0]), value: 10000 }], // list of creators
         royalties: [], // royalties

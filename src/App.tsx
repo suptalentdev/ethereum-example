@@ -1,38 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import Web3 from "web3"
 import { createRaribleSdk, RaribleSdk } from "@rarible/protocol-ethereum-sdk"
-import { NftItem } from "@rarible/protocol-api-client"
-import { toAddress, toBigNumber } from "@rarible/types"
-import { SellRequest } from "@rarible/protocol-ethereum-sdk/build/order/sell"
 import { network } from "./config"
 import './App.css'
-import { SimpleOrder } from "@rarible/protocol-ethereum-sdk/build/order/sign-order"
-
-type CreateOrderFormState = {
-	contract: string,
-	tokenId: string,
-	price: string,
-	hash: string
-}
-
-type BuyOrderFormState = {
-	hash: string,
-	amount: string
-}
+import Dashboard from "./Dashboard"
 
 function App() {
 	const [provider, setProvider] = useState<any>()
 	const [sdk, setSdk] = useState<RaribleSdk>()
 	const [accounts, setAccounts] = useState<string[]>([])
-	const [ownedItems, setOwnedItems] = useState<NftItem[]>()
-	const [order, setOrder] = useState<SimpleOrder>()
-	const [createOrderForm, setCreateOrderForm] = useState<CreateOrderFormState>({
-		contract: '',
-		tokenId: '',
-		price: '10',
-		hash: '',
-	})
-	const [purchaseOrderForm, setPurchaseOrderForm] = useState<BuyOrderFormState>({ hash: '', amount: '1' })
 
 	/**
 	 * Initialize SDK
@@ -72,6 +48,7 @@ function App() {
 		}
 	}
 
+<<<<<<< Updated upstream
 	/**
 	 * Handle connect to wallet
 	 */
@@ -85,7 +62,7 @@ function App() {
 	const lazyMint = async () => {
 		const item = await sdk?.nft.mintLazy({
 			'@type': 'ERC721',
-			contract: toAddress('0x6ede7f3c26975aad32a475e1021d8f6f39c89d82'), // rinkeby default Rarible collection
+			contract: toAddress('0x509fd4cdaa29be7b1fad251d8ea0fca2ca91eb60'), // rinkeby default Rarible collection
 			uri: "/ipfs/QmWLsBu6nS4ovaHbGAXprD1qEssJu4r5taQfB74sCG51tp",
 			creators: [{ account: toAddress(accounts[0]), value: 10000 }],
 			royalties: [],
@@ -168,55 +145,19 @@ function App() {
 		setPurchaseOrderForm({ ...createOrderForm, amount: e.currentTarget.value })
 	}
 
+=======
+>>>>>>> Stashed changes
 	if (!provider?.isMetaMask) {
-		return (<strong>Please install metamask to use the app</strong>)
+		return <strong>Please install metamask to use the app</strong>
+	} else {
+		if (sdk) {
+			return <Dashboard provider={provider} sdk={sdk} accounts={accounts}/>
+		} else {
+			return <strong>Sdk not initialized</strong>
+		}
 	}
-	return (
-		<div className="App">
-			<div>
-				<button onClick={connectWalletHandler} disabled={!!provider?.selectedAddress}>
-					{accounts.length ? 'Connected' : 'Connect wallet'}
-				</button>
-				{accounts.length && <span>Connected address: {accounts[0]}</span>}
-				<div style={{ padding: '4px' }}>
-					<p>Mint item form (TODO)</p>
-					<button onClick={lazyMint}>lazy mint</button>
-				</div>
-			</div>
 
-			<div style={{ padding: '4px' }}>
-				<p>Create sell order form</p>
-				<input onChange={handleChangeOrderContract} value={createOrderForm?.contract}
-							 placeholder={"Contract address"}/>
-				<input onChange={handleChangeOrderTokenId} value={createOrderForm?.tokenId} placeholder={"Token Id"}/>
-				<input onChange={handleChangeOrderPrice} value={createOrderForm?.price} placeholder={"Price"}/>
-				<button onClick={createSellOrder}>
-					Sell
-				</button>
-			</div>
 
-			<div style={{ padding: '4px' }}>
-				<p>Purchase created order form</p>
-				<input onChange={handleOrderHash} value={purchaseOrderForm.hash} placeholder={'Order hash'}/>
-				<input onChange={handlePurchaseOrderAmount} value={purchaseOrderForm.amount} placeholder={'amount'}/>
-				<button onClick={handlePurchaseOrder}>Purchase</button>
-			</div>
-
-			<div>
-				<p>NFT items owned by me: <button onClick={handleGetMyNfts}>Refresh</button></p>
-				<ul>
-					{ownedItems?.length && ownedItems.map(i => {
-						return (
-							<li key={i.id}>
-								<p><strong>Item</strong> id: {i.id}</p>
-								<p><strong>Lazy supply:</strong> {i.lazySupply}</p>
-							</li>
-						)
-					})}
-				</ul>
-			</div>
-		</div>
-	)
 }
 
 export default App
